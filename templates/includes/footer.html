@@ -1,0 +1,25 @@
+<!-- Footer -->
+<footer class="bg-light border-top mt-auto">
+    <div class="container-fluid py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    &copy; 2024 Ambivare ERP. All rights reserved.
+                    {% if request.tenant %}
+                        | <strong>{{ request.tenant.name }}</strong>
+                    {% endif %}
+                </small>
+            </div>
+            <div class="col-md-6 text-end">
+                <small class="text-muted">
+                    <a href="#" class="text-decoration-none text-muted">Terms</a> |
+                    <a href="#" class="text-decoration-none text-muted">Privacy</a> |
+                    <a href="#" class="text-decoration-none text-muted">Support</a>
+                    {% if user.is_authenticated %}
+                        | <i class="bi bi-clock"></i> {{ user.timezone|default:"UTC" }}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+</footer>

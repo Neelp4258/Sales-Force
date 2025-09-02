@@ -1,3 +1,2 @@
-from django.db import models
-
-# Create your models here.
+# Import all models from the models package
+from .models import *

@@ -70,6 +70,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+    # Custom middleware
+    'ambivare_erp.middleware.subscription.SubscriptionMiddleware',
+    'ambivare_erp.middleware.subscription.UsageTrackingMiddleware',
+    'ambivare_erp.middleware.tenant.TenantActivityMiddleware',
+    'ambivare_erp.middleware.tenant.TenantContextMiddleware',
+    'ambivare_erp.middleware.security.SecurityHeadersMiddleware',
+    'ambivare_erp.middleware.security.RateLimitMiddleware',
 ]
 
 ROOT_URLCONF = 'ambivare_erp.urls'
@@ -331,3 +338,10 @@ SUBSCRIPTION_PLANS = {
 
 # Trial Settings
 TRIAL_DAYS = 14
+
+# Encryption Key (for sensitive data)
+ENCRYPTION_KEY = config('ENCRYPTION_KEY', default='your-32-byte-encryption-key-here')
+
+# Admin IP Whitelist (optional)
+ENABLE_IP_WHITELIST = config('ENABLE_IP_WHITELIST', default=False, cast=bool)
+ADMIN_IP_WHITELIST = config('ADMIN_IP_WHITELIST', default='').split(',')
