@@ -1,0 +1,202 @@
+<!-- Sidebar -->
+<nav class="sidebar bg-light border-end position-fixed h-100" style="width: 250px; top: 60px;">
+    <div class="p-3">
+        <!-- User Info -->
+        <div class="d-flex align-items-center mb-4 p-2 bg-white rounded shadow-sm">
+            {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" class="rounded-circle me-3" width="40" height="40" alt="Avatar">
+            {% else %}
+                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person text-white"></i>
+                </div>
+            {% endif %}
+            <div>
+                <div class="fw-bold">{{ user.first_name|default:"User" }}</div>
+                <small class="text-muted">{{ user.role|title }}</small>
+            </div>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <ul class="nav nav-pills flex-column">
+            <!-- Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+                   href="{% url 'accounts:dashboard' %}">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
+            </li>
+            
+            <!-- Sales Section -->
+            <li class="nav-item mt-3">
+                <small class="text-muted text-uppercase fw-bold px-3">Sales</small>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'lead' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'sales:lead-list' %}">
+                    <i class="bi bi-person-lines-fill me-2"></i> Leads
+                    {% if pending_leads_count > 0 %}
+                        <span class="badge bg-warning float-end">{{ pending_leads_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'customer' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'sales:customer-list' %}">
+                    <i class="bi bi-building me-2"></i> Customers
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'deal' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'sales:deal-list' %}">
+                    <i class="bi bi-currency-dollar me-2"></i> Deals
+                    {% if active_deals_count > 0 %}
+                        <span class="badge bg-info float-end">{{ active_deals_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'pipeline' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'sales:deal-pipeline' %}">
+                    <i class="bi bi-kanban me-2"></i> Pipeline
+                </a>
+            </li>
+            
+            <!-- Products Section -->
+            <li class="nav-item mt-3">
+                <small class="text-muted text-uppercase fw-bold px-3">Products</small>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'product' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'products:product-list' %}">
+                    <i class="bi bi-box-seam me-2"></i> Products
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'products:category-list' %}">
+                    <i class="bi bi-tags me-2"></i> Categories
+                </a>
+            </li>
+            
+            <!-- Billing Section -->
+            <li class="nav-item mt-3">
+                <small class="text-muted text-uppercase fw-bold px-3">Billing</small>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'quotation' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'billing:quotation-list' %}">
+                    <i class="bi bi-file-earmark-text me-2"></i> Quotations
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'invoice' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'billing:invoice-list' %}">
+                    <i class="bi bi-receipt me-2"></i> Invoices
+                    {% if unpaid_invoices_count > 0 %}
+                        <span class="badge bg-danger float-end">{{ unpaid_invoices_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'payment' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'billing:payment-list' %}">
+                    <i class="bi bi-cash-stack me-2"></i> Payments
+                </a>
+            </li>
+            
+            <!-- Tasks Section -->
+            <li class="nav-item mt-3">
+                <small class="text-muted text-uppercase fw-bold px-3">Tasks</small>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'task' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'tasks:task-list' %}">
+                    <i class="bi bi-check-square me-2"></i> Tasks
+                    {% if pending_tasks_count > 0 %}
+                        <span class="badge bg-primary float-end">{{ pending_tasks_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'activity' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'sales:activity-list' %}">
+                    <i class="bi bi-calendar-event me-2"></i> Activities
+                </a>
+            </li>
+            
+            <!-- Analytics Section -->
+            <li class="nav-item mt-3">
+                <small class="text-muted text-uppercase fw-bold px-3">Analytics</small>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'reports' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'analytics:reports' %}">
+                    <i class="bi bi-graph-up me-2"></i> Reports
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if 'analytics-dashboard' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'analytics:dashboard' %}">
+                    <i class="bi bi-bar-chart me-2"></i> Analytics
+                </a>
+            </li>
+            
+            <!-- Admin Section -->
+            {% if user.is_tenant_admin %}
+                <li class="nav-item mt-3">
+                    <small class="text-muted text-uppercase fw-bold px-3">Admin</small>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'accounts:user-list' %}">
+                        <i class="bi bi-people me-2"></i> Users
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if 'integration' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'integrations:integration-list' %}">
+                        <i class="bi bi-plug me-2"></i> Integrations
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if 'settings' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'accounts:settings' %}">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        
+        <!-- Trial/Subscription Info -->
+        {% if request.tenant_context %}
+            <div class="mt-auto p-3 bg-light rounded">
+                {% if request.tenant_context.is_trial %}
+                    <small class="text-muted">Trial expires in</small>
+                    <div class="fw-bold text-warning">{{ request.tenant.days_until_trial_end }} days</div>
+                    <a href="{% url 'billing:upgrade' %}" class="btn btn-sm btn-primary w-100 mt-2">
+                        Upgrade Now
+                    </a>
+                {% else %}
+                    <small class="text-muted">Plan</small>
+                    <div class="fw-bold">{{ request.tenant_context.subscription_plan|title }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</nav>

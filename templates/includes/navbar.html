@@ -1,0 +1,121 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="{% url 'accounts:dashboard' %}">
+            <i class="bi bi-graph-up-arrow"></i> Ambivare ERP
+            {% if request.tenant %}
+                <span class="badge bg-light text-primary ms-2">{{ request.tenant.name }}</span>
+            {% endif %}
+        </a>
+        
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Search -->
+            <form class="d-flex mx-auto" style="max-width: 400px;">
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Search leads, customers, deals..." 
+                           hx-get="{% url 'search' %}" 
+                           hx-trigger="keyup changed delay:500ms" 
+                           hx-target="#search-results"
+                           hx-indicator="#search-spinner">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                        <span id="search-spinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                    </span>
+                </div>
+            </form>
+            
+            <!-- Right Menu -->
+            <ul class="navbar-nav ms-auto">
+                <!-- Quick Add -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-plus-circle"></i> Quick Add
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'sales:lead-create' %}">
+                            <i class="bi bi-person-plus"></i> New Lead
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'sales:customer-create' %}">
+                            <i class="bi bi-building-add"></i> New Customer
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'sales:deal-create' %}">
+                            <i class="bi bi-currency-dollar"></i> New Deal
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'tasks:task-create' %}">
+                            <i class="bi bi-check-square"></i> New Task
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'products:product-create' %}">
+                            <i class="bi bi-box"></i> New Product
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Notifications -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link position-relative" href="#" data-bs-toggle="dropdown"
+                       hx-get="{% url 'notifications:list' %}"
+                       hx-trigger="click"
+                       hx-target="#notification-dropdown">
+                        <i class="bi bi-bell"></i>
+                        {% if unread_notifications_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ unread_notifications_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    <div id="notification-dropdown" class="dropdown-menu dropdown-menu-end" style="width: 350px;">
+                        <!-- Notifications loaded via HTMX -->
+                    </div>
+                </li>
+                
+                <!-- User Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person text-white"></i>
+                            </div>
+                        {% endif %}
+                        <span>{{ user.first_name|default:user.email }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><h6 class="dropdown-header">{{ user.full_name }}</h6></li>
+                        <li><small class="dropdown-header text-muted">{{ user.role|title }}</small></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                            <i class="bi bi-person-circle"></i> My Profile
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:settings' %}">
+                            <i class="bi bi-gear"></i> Settings
+                        </a></li>
+                        {% if user.is_tenant_admin %}
+                            <li><a class="dropdown-item" href="{% url 'billing:subscription' %}">
+                                <i class="bi bi-credit-card"></i> Subscription
+                            </a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Search Results Modal -->
+<div id="search-results"></div>
+
+<!-- Add spacing for fixed navbar -->
+<div style="height: 60px;"></div>
